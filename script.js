@@ -18,7 +18,7 @@ function addTransaction() {
     const name = document.getElementById("name").value;
     const description = document.getElementById("description").value;
     const type = document.getElementById("type").value;
-    const amount = document.getElementById("amount").value;
+    const amount = Number(document.getElementById("amount").value);
     const notes = document.getElementById("notes").value;
     const requestBody = {
         action: "addTransaction",
@@ -28,6 +28,8 @@ function addTransaction() {
         amount,
         notes,
     };
+
+    if(isNaN(amount)) throw new Error('AMount is not a valid digit')
 
     fetch(scriptURL, {
         method: "POST",
