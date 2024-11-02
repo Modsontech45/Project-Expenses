@@ -7,9 +7,18 @@
     <link rel="stylesheet" href="review.css">
     <script>
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyJRlifOenjUod3V_2OXcOieKmulJhXfxQLz0F_lfwkEnH3R3MYjBnxXXWAco1jT4Q/exec'; // Replace with your script URL
+        function showSpinner() {
+        const spinner = document.getElementById("spinner");
+    spinner.style.display = "flex"; // Show the spinner
+}
 
+function hideSpinner() {
+    const spinner = document.getElementById("spinner");
+    spinner.style.display = "none"; // Hide the spinner
+}
         // Function to get transaction data by transactionId
         function getTransaction() {
+            showSpinner();
             const urlParams = new URLSearchParams(window.location.search);
             const transactionId = urlParams.get('transactionId');
             const token = urlParams.get('token');
@@ -26,8 +35,9 @@
             .then(data => {
                 if (data.status === 'success') {
                     displayTransaction(data.transaction);
+                 hideSpinner();
                 } else {
-                    alert(data.message);
+                    document.getElementById("demo").innerText = data.message;
                 }
             })
             .catch(error => console.error("Error:", error));
@@ -46,6 +56,7 @@
 
         // Function to mark transaction as reviewed
         function markAsReviewed() {
+            showSpinner();
             const urlParams = new URLSearchParams(window.location.search);
             const transactionId = urlParams.get('transactionId');
             const token = urlParams.get('token');
@@ -60,12 +71,14 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.status === 'success') {
-                    alert("Transaction marked as reviewed!");
+                if (data.status === 'success') { 
+                    document.getElementById("demo").innerText  = "Transaction marked as reviewed!";
+                 
                 } else {
                     document.getElementById("demo").innerText = data.message;
-                 
+                    
                 }
+                hideSpinner() ;
             })
             .catch(error => console.error("Error:", error));
         }
@@ -77,6 +90,9 @@
 <body>
     <div class="container">
         <h1>Review Transaction</h1>
+        <div id="spinner" style="display: none;">
+            <div class="loader"></div>
+        </div>
     <div>
         <p id="demo"></p>
         <p><strong>Date:</strong> <span id="date"></span></p>
